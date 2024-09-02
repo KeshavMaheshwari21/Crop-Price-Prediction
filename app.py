@@ -3,13 +3,11 @@ import pandas as pd
 import pickle
 
 def load_model():
-    with open('./model.pkt', 'rb') as file:
-        model = pickle.load(file)
+    model = pickle.load(open("model.pkt","rb"))
     return model
 
 def load_encoder():
-    with open('./encoder.pkt', 'rb') as file:
-        encoder = pickle.load(file)
+    encoder = pickle.load(open("encoder.pkt","rb"))
     return encoder
 
 df = pd.read_csv('Data_change.csv')
