@@ -3,12 +3,12 @@ import pandas as pd
 import pickle
 
 def load_model():
-    with open('./model.pkl', 'rb') as file:
+    with open('./model.pkt', 'rb') as file:
         model = pickle.load(file)
     return model
 
 def load_encoder():
-    with open('./encoder.pkl', 'rb') as file:
+    with open('./encoder.pkt', 'rb') as file:
         encoder = pickle.load(file)
     return encoder
 
