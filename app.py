@@ -2,10 +2,15 @@ import streamlit as st
 import pandas as pd
 import pickle
 
-with open('./model.pkl', 'rb') as file:
-    model = pickle.load(file)
-with open('./encoder.pkl', 'rb') as file:
-    encoder = pickle.load(file)
+def load_model():
+    with open('./model.pkl', 'rb') as file:
+        model = pickle.load(file)
+    return model
+
+def load_encoder():
+    with open('./encoder.pkl', 'rb') as file:
+        encoder = pickle.load(file)
+    return encoder
 
 df = pd.read_csv('Data_change.csv')
 
@@ -87,9 +92,11 @@ if submit:
         """, unsafe_allow_html=True
     )
 
+    encoder = load_encoder()
     new_data_encoded = encoder.transform(new_data)
 
     # Predict min and max prices
+    model = load_model()
     predicted_price = model.predict(new_data_encoded)
 
     # Display the results
