@@ -1,10 +1,12 @@
 import streamlit as st
 import pandas as pd
-import joblib
+import pickle
 
-# Load model and encoder
-model = joblib.load('./models/RandomForest.lb')
-encoder = joblib.load('./models/Encoder.lb')
+with open('model.pkl', 'rb') as file:
+    model = pickle.load(file)
+with open('encoder.pkl', 'rb') as file:
+    encoder = pickle.load(file)
+
 df = pd.read_csv('Data_change.csv')
 
 st.image('./Photos/photo2.jpg',use_column_width=True)
