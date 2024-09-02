@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 import pickle
 
-with open('model.pkl', 'rb') as file:
+with open('./model.pkl', 'rb') as file:
     model = pickle.load(file)
-with open('encoder.pkl', 'rb') as file:
+with open('./encoder.pkl', 'rb') as file:
     encoder = pickle.load(file)
 
 df = pd.read_csv('Data_change.csv')
