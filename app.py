@@ -2,18 +2,22 @@ import streamlit as st
 import pandas as pd
 import pickle
 
+# Cache the model and encoder loading functions
+@st.cache_resource
 def load_model():
-    model = pickle.load(open("model.pkt","rb"))
-    return model
+    return pickle.load(open("model.pkt", "rb"))
 
+@st.cache_resource
 def load_encoder():
-    encoder = pickle.load(open("encoder.pkt","rb"))
-    return encoder
+    return pickle.load(open("encoder.pkt", "rb"))
 
+# Load data
 df = pd.read_csv('Data_change.csv')
 
-st.image('./Photos/photo2.jpg',use_column_width=True)
+# Display the image
+st.image('./Photos/photo2.jpg', use_column_width=True)
 
+# Title styling
 st.markdown(
     """
     <style>
@@ -30,18 +34,23 @@ st.markdown(
 )
 
 # Collect user input
-state = st.selectbox('Select State', ['Tamil Nadu', 'Uttar Pradesh', 'Maharashtra', 'West Bengal',
-       'Madhya Pradesh', 'Haryana', 'Punjab', 'Kerala', 'Telangana', 'Tripura',
-       'Gujarat', 'Odisha', 'Himachal Pradesh', 'Rajasthan', 'Bihar',
-       'Chandigarh', 'Uttrakhand', 'Karnataka', 'Chattisgarh',
-       'Andhra Pradesh'])
-district = st.selectbox('Select District',list(df[df['State'] == state].value_counts('District').keys()))
-market = st.selectbox('Select Market',list(df[df['State'] == state].value_counts('Market').keys()))
-commodity = st.selectbox('Select Commodity',list(df[df['State'] == state].value_counts('Commodity').keys()))
-variety = st.selectbox('Select Variety',list(df[df['State'] == state].value_counts('Variety').keys()))
-grade = st.selectbox('Select Grade',list(df[df['State'] == state].value_counts('Grade').keys())) 
+state = st.selectbox('Select State', df['State'].unique())
 
+# Filter options based on selected state
+districts = df[df['State'] == state]['District'].unique()
+district = st.selectbox('Select District', districts)
 
+markets = df[df['District'] == district]['Market'].unique()
+market = st.selectbox('Select Market', markets)
+
+commodities = df[df['Market'] == market]['Commodity'].unique()
+commodity = st.selectbox('Select Commodity', commodities)
+
+varieties = df[df['Commodity'] == commodity]['Variety'].unique()
+variety = st.selectbox('Select Variety', varieties)
+
+grades = df[df['Variety'] == variety]['Grade'].unique()
+grade = st.selectbox('Select Grade', grades)
 
 # Center the button using custom CSS
 st.markdown(
@@ -58,9 +67,8 @@ st.markdown(
 # Create the centered button
 submit = st.button("Submit")
 
-# Handle submission and display the response box
+# Handle submission and display the response
 if submit:
-    # Assuming you have variables `state`, `district`, `market`, `commodity`, `variety`, and `grade`
     new_data = pd.DataFrame({
         'State': [state], 
         'District': [district], 
@@ -70,32 +78,13 @@ if submit:
         'Grade': [grade]
     })
 
-    # Perform further actions with new_data if needed
     st.write("Data for prediction:", new_data)
-
-    # Center the response box using custom CSS
-    st.markdown(
-        """
-        <style>
-        div.response-box {
-            display: block;
-            margin: 20px auto;
-            padding: 15px;
-            border-radius: 10px;
-            background-color: #f0f0f0;
-            width: 50%;
-            text-align: center;
-        }
-        </style>
-        """, unsafe_allow_html=True
-    )
 
     encoder = load_encoder()
     new_data_encoded = encoder.transform(new_data)
 
-    # Predict min and max prices
     model = load_model()
     predicted_price = model.predict(new_data_encoded)
 
-    # Display the results
-    st.subheader(f"**Predicted Price: ₹**{predicted_price[0]}")
+    # Display the result
+    st.subheader(f"**Predicted Price: ₹{predicted_price[0]:.2f}**")
