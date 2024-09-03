@@ -1,7 +1,21 @@
 import streamlit as st
 import pandas as pd
-import pickle
 import os
+import pickle
+
+try:
+    with open('model.pkt', 'rb') as f:
+        model = pickle.load(f)
+    print("Model loaded successfully.")
+except Exception as e:
+    print(f"Error loading model: {e}")
+
+try:
+    with open('encoder.pkt', 'rb') as f:
+        encoder = pickle.load(f)
+    print("Encoder loaded successfully.")
+except Exception as e:
+    print(f"Error loading encoder: {e}")
 
 # Cache the model and encoder loading functions
 @st.cache_resource
