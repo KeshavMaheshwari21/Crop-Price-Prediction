@@ -1,15 +1,24 @@
 import streamlit as st
 import pandas as pd
 import pickle
+import os
 
 # Cache the model and encoder loading functions
 @st.cache_resource
 def load_model():
-    return pickle.load(open("model.pkt", "rb"))
+    model_path = "model.pkt"
+    if not os.path.exists(model_path):
+        st.error(f"Model file {model_path} does not exist.")
+        return None
+    return pickle.load(open(model_path, "rb"))
 
 @st.cache_resource
 def load_encoder():
-    return pickle.load(open("encoder.pkt", "rb"))
+    encoder_path = "encoder.pkt"
+    if not os.path.exists(encoder_path):
+        st.error(f"Encoder file {encoder_path} does not exist.")
+        return None
+    return pickle.load(open(encoder_path, "rb"))
 
 # Load data
 df = pd.read_csv('Data_change.csv')
@@ -81,10 +90,16 @@ if submit:
     st.write("Data for prediction:", new_data)
 
     encoder = load_encoder()
-    new_data_encoded = encoder.transform(new_data)
+    if encoder is None:
+        st.error("Failed to load encoder.")
+    else:
+        new_data_encoded = encoder.transform(new_data)
 
-    model = load_model()
-    predicted_price = model.predict(new_data_encoded)
+        model = load_model()
+        if model is None:
+            st.error("Failed to load model.")
+        else:
+            predicted_price = model.predict(new_data_encoded)
 
-    # Display the result
-    st.subheader(f"**Predicted Price: ₹{predicted_price[0]:.2f}**")
+            # Display the result
+            st.subheader(f"**Predicted Price: ₹{predicted_price[0]:.2f}**")
