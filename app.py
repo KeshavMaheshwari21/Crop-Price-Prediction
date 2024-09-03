@@ -3,22 +3,8 @@ import pandas as pd
 import os
 import pickle
 
-try:
-    with open('model.pkt', 'rb') as f:
-        model = pickle.load(f)
-    print("Model loaded successfully.")
-except Exception as e:
-    print(f"Error loading model: {e}")
 
-try:
-    with open('encoder.pkt', 'rb') as f:
-        encoder = pickle.load(f)
-    print("Encoder loaded successfully.")
-except Exception as e:
-    print(f"Error loading encoder: {e}")
-
-# Cache the model and encoder loading functions
-@st.cache_resource
+# Cache the model and 
 def load_model():
     model_path = "model.pkt"
     if not os.path.exists(model_path):
@@ -26,7 +12,6 @@ def load_model():
         return None
     return pickle.load(open(model_path, "rb"))
 
-@st.cache_resource
 def load_encoder():
     encoder_path = "encoder.pkt"
     if not os.path.exists(encoder_path):
