@@ -82,16 +82,13 @@ if submit:
     st.write("Data for prediction:", new_data)
 
     encoder = OneHotEncoder()
-    if encoder is None:
-        st.error("Failed to load encoder.")
-    else:
-        new_data_encoded = encoder.transform(new_data)
+    new_data_encoded = encoder.transform(new_data)
 
-        model = load_model()
-        if model is None:
-            st.error("Failed to load model.")
-        else:
-            predicted_price = model.predict(new_data_encoded)
+    model = load_model()
+    if model is None:
+        st.error("Failed to load model.")
+    else:
+        predicted_price = model.predict(new_data_encoded)
 
             # Display the result
-            st.subheader(f"**Predicted Price: ₹{predicted_price[0]:.2f}**")
+        st.subheader(f"**Predicted Price: ₹{predicted_price[0]:.2f}**")
