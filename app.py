@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import os
+from sklearn.preprocessing import OneHotEncoder
 import pickle
 
 
@@ -11,13 +11,6 @@ def load_model():
         st.error(f"Model file {model_path} does not exist.")
         return None
     return pickle.load(open(model_path, "rb"))
-
-def load_encoder():
-    encoder_path = "encoder.pkt"
-    if not os.path.exists(encoder_path):
-        st.error(f"Encoder file {encoder_path} does not exist.")
-        return None
-    return pickle.load(open(encoder_path, "rb"))
 
 # Load data
 df = pd.read_csv('Data_change.csv')
@@ -88,7 +81,7 @@ if submit:
 
     st.write("Data for prediction:", new_data)
 
-    encoder = load_encoder()
+    encoder = OneHotEncoder()
     if encoder is None:
         st.error("Failed to load encoder.")
     else:
