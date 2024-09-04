@@ -82,7 +82,7 @@ if submit:
     st.write("Data for prediction:", new_data)
 
     encoder = OneHotEncoder()
-    new_data_encoded = encoder.transform(new_data)
+    new_data_encoded = encoder.fit_transform(new_data)
 
     model = load_model()
     if model is None:
