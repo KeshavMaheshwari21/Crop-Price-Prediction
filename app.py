@@ -1,12 +1,15 @@
 import streamlit as st
 import pandas as pd
-from sklearn.preprocessing import OneHotEncoder
+# from sklearn.preprocessing import OneHotEncoder
 import pickle
 
 # Cache the model and 
 with open('models/model.pkl', 'rb') as file:
     model = pickle.load(file)
 
+with open('models/encoder.pkl', 'rb') as file:
+    encoder = pickle.load(file)
+    
 # Load data
 df = pd.read_csv('data/Data_change.csv')
 
@@ -76,8 +79,7 @@ if submit:
 
     st.write("Data for prediction:", new_data)
 
-    encoder = OneHotEncoder()
-    new_data_encoded = encoder.fit_transform(new_data)
+    new_data_encoded = encoder.transform(new_data)
 
     predicted_price = model.predict(new_data_encoded)
 
