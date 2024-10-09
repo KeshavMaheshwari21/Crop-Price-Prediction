@@ -5,12 +5,8 @@ import pickle
 import os
 
 # Cache the model and 
-def load_model():
-    model_path = "models/model.pkl"
-    if not os.path.exists(model_path):
-        st.error(f"Model file {model_path} does not exist.")
-        return None
-    return pickle.load(open(model_path, "rb"))
+with open('models/model.pkl', 'rb') as file:
+    model = pickle.load(file)
 
 # Load data
 df = pd.read_csv('data/Data_change.csv')
@@ -84,11 +80,7 @@ if submit:
     encoder = OneHotEncoder()
     new_data_encoded = encoder.fit_transform(new_data)
 
-    model = load_model()
-    if model is None:
-        st.error("Failed to load model.")
-    else:
-        predicted_price = model.predict(new_data_encoded)
+    predicted_price = model.predict(new_data_encoded)
 
-            # Display the result
-        st.subheader(f"**Predicted Price: ₹{predicted_price[0]:.2f}**")
+    # Display the result
+    st.subheader(f"**Predicted Price: ₹{predicted_price[0]:.2f}**")
