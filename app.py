@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from sklearn.preprocessing import OneHotEncoder
 import pickle
-
+import os
 
 # Cache the model and 
 def load_model():
