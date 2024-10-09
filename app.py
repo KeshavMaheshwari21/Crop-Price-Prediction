@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 from sklearn.preprocessing import OneHotEncoder
 import pickle
-import os
 
 # Cache the model and 
 with open('models/model.pkl', 'rb') as file:
