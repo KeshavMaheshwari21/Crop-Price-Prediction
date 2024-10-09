@@ -6,17 +6,17 @@ import pickle
 
 # Cache the model and 
 def load_model():
-    model_path = "model.pkt"
+    model_path = "models/model.pkl"
     if not os.path.exists(model_path):
         st.error(f"Model file {model_path} does not exist.")
         return None
     return pickle.load(open(model_path, "rb"))
 
 # Load data
-df = pd.read_csv('Data_change.csv')
+df = pd.read_csv('data/Data_change.csv')
 
 # Display the image
-st.image('./Photos/photo2.jpg', use_column_width=True)
+st.image('Photos/photo2.jpg', use_column_width=True)
 
 # Title styling
 st.markdown(
